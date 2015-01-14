@@ -2,6 +2,7 @@
 *.slo
 *.lo
 *.o
+*.opp
 *.obj
 
 # Precompiled Headers
@@ -26,3 +27,6 @@
 *.exe
 *.out
 *.app
+
+# VIM swap files
+.*.sw*
