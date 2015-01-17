@@ -132,7 +132,7 @@ struct type_list<Head, Tail...>
   template<class... Ts>
   using append = type_list<Head, Tail..., Ts...>;
 
-  using reverse = typename tail::reverse::template append<head>::template instantiate<type_list>;
+  using reverse = typename tail::reverse::template append<head>::template instantiate<::type_list>;
 
   template<template<class> class F>
   using map = type_list<F<Head>, F<Tail>...>;

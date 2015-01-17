@@ -39,6 +39,9 @@ class variant
 
   alignas(strictest_value_alignment) char store_[max_value_size];
 
+  template<class T>
+  using is_variant_type = typename type_list<Types...>::template has_elem<typename std::decay<T>::type>;
+
   boxed_type const * ptr_() const {
     return reinterpret_cast<boxed_type const *> (&store_);
   }
@@ -71,7 +74,7 @@ public:
   template<
       class T
     , class = typename std::enable_if<
-        type_list<Types...>::template has_elem<T>::value>::type>
+        is_variant_type<T>::value>::type>
   variant(T &&a) {
     new (ptr_()) boxed<T> (std::forward<T> (a));
   }
@@ -82,7 +85,7 @@ public:
   // accessors
   template<class T>
   typename std::enable_if<
-      type_list<Types...>::template has_elem<T>::value
+      is_variant_type<T>::value
     , T &>::type
   get() {
     return ref_<T>().value;
@@ -90,7 +93,7 @@ public:
 
   template<class T>
   typename std::enable_if<
-      type_list<Types...>::template has_elem<T>::value
+      is_variant_type<T>::value
     , T const &>::type
   get() const {
     return ref_<T>().value;
@@ -108,7 +111,7 @@ public:
 
   template<class T>
   typename std::enable_if<
-      type_list<Types...>::template has_elem<T>::value
+      is_variant_type<T>::value
     , variant &>::type
   operator=(T &&a) {
     ptr_()->~boxed_type();
